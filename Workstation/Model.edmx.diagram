@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="def7ae2098c54334b9ec5a26fa2b4adc" Name="Diagram1" DisplayType="true" ZoomLevel="98">
+        <EntityTypeShape EntityType="MorgueModel.Stuff" Width="1.75" PointX="8.875" PointY="4.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="MorgueModel.Buildings" Width="1.5" PointX="0.75" PointY="1" />
+        <EntityTypeShape EntityType="MorgueModel.Morgues" Width="2" PointX="3" PointY="0.75" />
+        <AssociationConnector Association="MorgueModel.FK_Morgues_Buildings" />
+        <EntityTypeShape EntityType="MorgueModel.Positions" Width="2.375" PointX="6.625" PointY="0.75" />
+        <AssociationConnector Association="MorgueModel.FK_Positions_Morgues" />
+        <AssociationConnector Association="MorgueModel.FK_Positions_Stuff" />
+        <EntityTypeShape EntityType="MorgueModel.Operations" Width="2.5" PointX="2.75" PointY="4.75" />
+        <AssociationConnector Association="MorgueModel.FK_Operations_Morgues" />
+        <AssociationConnector Association="MorgueModel.FK_Operations_Positions" />
+        <EntityTypeShape EntityType="MorgueModel.Users" Width="1.75" PointX="0.5" PointY="3.875" />
+        </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

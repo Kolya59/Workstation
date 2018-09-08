@@ -1,0 +1,431 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="Хранилище MorgueModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Buildings">
+          <Key>
+            <PropertyRef Name="address" />
+          </Key>
+          <Property Name="address" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="type" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="floorCount" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Morgues">
+          <Key>
+            <PropertyRef Name="idMorgue" />
+          </Key>
+          <Property Name="idMorgue" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="address" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="typeOfMorgue" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="officialName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="workersAmount" Type="int" Nullable="false" />
+          <Property Name="typeOfFinancing" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Operations">
+          <Key>
+            <PropertyRef Name="idMorgue" />
+            <PropertyRef Name="idPatient" />
+            <PropertyRef Name="idOperator" />
+            <PropertyRef Name="nameOfOperatorsPosition" />
+          </Key>
+          <Property Name="idMorgue" Type="int" Nullable="false" />
+          <Property Name="idPatient" Type="int" Nullable="false" />
+          <Property Name="idOperator" Type="int" Nullable="false" />
+          <Property Name="nameOfOperatorsPosition" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="date" Type="date" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Positions">
+          <Key>
+            <PropertyRef Name="idMorgue" />
+            <PropertyRef Name="idPerson" />
+            <PropertyRef Name="nameOfPosition" />
+          </Key>
+          <Property Name="idMorgue" Type="int" Nullable="false" />
+          <Property Name="idPerson" Type="int" Nullable="false" />
+          <Property Name="nameOfPosition" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="salary" Type="int" Nullable="false" />
+          <Property Name="permissionToOperate" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Stuff">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="firstName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="secondName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="age" Type="int" Nullable="false" />
+          <Property Name="pensioner" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="login" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="password" Type="char" MaxLength="88" Nullable="false" />
+          <Property Name="salt" Type="char" MaxLength="88" Nullable="false" />
+          <Property Name="role" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="dateOfReg" Type="date" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Morgues_Buildings">
+          <End Role="Buildings" Type="Self.Buildings" Multiplicity="1" />
+          <End Role="Morgues" Type="Self.Morgues" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Buildings">
+              <PropertyRef Name="address" />
+            </Principal>
+            <Dependent Role="Morgues">
+              <PropertyRef Name="address" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Operations_Morgues">
+          <End Role="Morgues" Type="Self.Morgues" Multiplicity="1" />
+          <End Role="Operations" Type="Self.Operations" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Morgues">
+              <PropertyRef Name="idMorgue" />
+            </Principal>
+            <Dependent Role="Operations">
+              <PropertyRef Name="idMorgue" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Operations_Positions">
+          <End Role="Positions" Type="Self.Positions" Multiplicity="1" />
+          <End Role="Operations" Type="Self.Operations" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Positions">
+              <PropertyRef Name="idMorgue" />
+              <PropertyRef Name="idPerson" />
+              <PropertyRef Name="nameOfPosition" />
+            </Principal>
+            <Dependent Role="Operations">
+              <PropertyRef Name="idMorgue" />
+              <PropertyRef Name="idOperator" />
+              <PropertyRef Name="nameOfOperatorsPosition" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Positions_Morgues">
+          <End Role="Morgues" Type="Self.Morgues" Multiplicity="1" />
+          <End Role="Positions" Type="Self.Positions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Morgues">
+              <PropertyRef Name="idMorgue" />
+            </Principal>
+            <Dependent Role="Positions">
+              <PropertyRef Name="idMorgue" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Positions_Stuff">
+          <End Role="Stuff" Type="Self.Stuff" Multiplicity="1" />
+          <End Role="Positions" Type="Self.Positions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Stuff">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Positions">
+              <PropertyRef Name="idPerson" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Хранилище MorgueModelContainer">
+          <EntitySet Name="Buildings" EntityType="Self.Buildings" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Morgues" EntityType="Self.Morgues" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Operations" EntityType="Self.Operations" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Positions" EntityType="Self.Positions" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Stuff" EntityType="Self.Stuff" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Morgues_Buildings" Association="Self.FK_Morgues_Buildings">
+            <End Role="Buildings" EntitySet="Buildings" />
+            <End Role="Morgues" EntitySet="Morgues" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Operations_Morgues" Association="Self.FK_Operations_Morgues">
+            <End Role="Morgues" EntitySet="Morgues" />
+            <End Role="Operations" EntitySet="Operations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Operations_Positions" Association="Self.FK_Operations_Positions">
+            <End Role="Positions" EntitySet="Positions" />
+            <End Role="Operations" EntitySet="Operations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Positions_Morgues" Association="Self.FK_Positions_Morgues">
+            <End Role="Morgues" EntitySet="Morgues" />
+            <End Role="Positions" EntitySet="Positions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Positions_Stuff" Association="Self.FK_Positions_Stuff">
+            <End Role="Stuff" EntitySet="Stuff" />
+            <End Role="Positions" EntitySet="Positions" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="MorgueModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Stuff">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="firstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="secondName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="age" Type="Int32" Nullable="false" />
+          <Property Name="pensioner" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Positions" Relationship="MorgueModel.FK_Positions_Stuff" FromRole="Stuff" ToRole="Positions" />
+        </EntityType>
+        <EntityContainer Name="MorgueEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Stuff" EntityType="Self.Stuff" />
+          <EntitySet Name="Buildings" EntityType="MorgueModel.Buildings" />
+          <EntitySet Name="Morgues" EntityType="MorgueModel.Morgues" />
+          <AssociationSet Name="FK_Morgues_Buildings" Association="MorgueModel.FK_Morgues_Buildings">
+            <End Role="Buildings" EntitySet="Buildings" />
+            <End Role="Morgues" EntitySet="Morgues" />
+          </AssociationSet>
+          <EntitySet Name="Positions" EntityType="MorgueModel.Positions" />
+          <AssociationSet Name="FK_Positions_Morgues" Association="MorgueModel.FK_Positions_Morgues">
+            <End Role="Morgues" EntitySet="Morgues" />
+            <End Role="Positions" EntitySet="Positions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Positions_Stuff" Association="MorgueModel.FK_Positions_Stuff">
+            <End Role="Stuff" EntitySet="Stuff" />
+            <End Role="Positions" EntitySet="Positions" />
+          </AssociationSet>
+          <EntitySet Name="Operations" EntityType="MorgueModel.Operations" />
+          <AssociationSet Name="FK_Operations_Morgues" Association="MorgueModel.FK_Operations_Morgues">
+            <End Role="Morgues" EntitySet="Morgues" />
+            <End Role="Operations" EntitySet="Operations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Operations_Positions" Association="MorgueModel.FK_Operations_Positions">
+            <End Role="Positions" EntitySet="Positions" />
+            <End Role="Operations" EntitySet="Operations" />
+          </AssociationSet>
+          <EntitySet Name="Users" EntityType="MorgueModel.Users" />
+          </EntityContainer>
+        <EntityType Name="Buildings">
+          <Key>
+            <PropertyRef Name="address" />
+          </Key>
+          <Property Name="address" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="type" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="floorCount" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Morgues" Relationship="MorgueModel.FK_Morgues_Buildings" FromRole="Buildings" ToRole="Morgues" />
+        </EntityType>
+        <EntityType Name="Morgues">
+          <Key>
+            <PropertyRef Name="idMorgue" />
+          </Key>
+          <Property Name="idMorgue" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="address" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="typeOfMorgue" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="officialName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="workersAmount" Type="Int32" Nullable="false" />
+          <Property Name="typeOfFinancing" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Buildings" Relationship="MorgueModel.FK_Morgues_Buildings" FromRole="Morgues" ToRole="Buildings" />
+          <NavigationProperty Name="Positions" Relationship="MorgueModel.FK_Positions_Morgues" FromRole="Morgues" ToRole="Positions" />
+          <NavigationProperty Name="Operations" Relationship="MorgueModel.FK_Operations_Morgues" FromRole="Morgues" ToRole="Operations" />
+        </EntityType>
+        <Association Name="FK_Morgues_Buildings">
+          <End Type="MorgueModel.Buildings" Role="Buildings" Multiplicity="1" />
+          <End Type="MorgueModel.Morgues" Role="Morgues" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Buildings">
+              <PropertyRef Name="address" />
+            </Principal>
+            <Dependent Role="Morgues">
+              <PropertyRef Name="address" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Positions">
+          <Key>
+            <PropertyRef Name="idMorgue" />
+            <PropertyRef Name="idPerson" />
+            <PropertyRef Name="nameOfPosition" />
+          </Key>
+          <Property Name="idMorgue" Type="Int32" Nullable="false" />
+          <Property Name="idPerson" Type="Int32" Nullable="false" />
+          <Property Name="nameOfPosition" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="salary" Type="Int32" Nullable="false" />
+          <Property Name="permissionToOperate" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Morgues" Relationship="MorgueModel.FK_Positions_Morgues" FromRole="Positions" ToRole="Morgues" />
+          <NavigationProperty Name="Stuff" Relationship="MorgueModel.FK_Positions_Stuff" FromRole="Positions" ToRole="Stuff" />
+          <NavigationProperty Name="Operations" Relationship="MorgueModel.FK_Operations_Positions" FromRole="Positions" ToRole="Operations" />
+        </EntityType>
+        <Association Name="FK_Positions_Morgues">
+          <End Type="MorgueModel.Morgues" Role="Morgues" Multiplicity="1" />
+          <End Type="MorgueModel.Positions" Role="Positions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Morgues">
+              <PropertyRef Name="idMorgue" />
+            </Principal>
+            <Dependent Role="Positions">
+              <PropertyRef Name="idMorgue" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Positions_Stuff">
+          <End Type="MorgueModel.Stuff" Role="Stuff" Multiplicity="1" />
+          <End Type="MorgueModel.Positions" Role="Positions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Stuff">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Positions">
+              <PropertyRef Name="idPerson" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Operations">
+          <Key>
+            <PropertyRef Name="idMorgue" />
+            <PropertyRef Name="idPatient" />
+            <PropertyRef Name="idOperator" />
+            <PropertyRef Name="nameOfOperatorsPosition" />
+          </Key>
+          <Property Name="idMorgue" Type="Int32" Nullable="false" />
+          <Property Name="idPatient" Type="Int32" Nullable="false" />
+          <Property Name="idOperator" Type="Int32" Nullable="false" />
+          <Property Name="nameOfOperatorsPosition" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="date" Type="DateTime" Nullable="false" Precision="0" />
+          <NavigationProperty Name="Morgues" Relationship="MorgueModel.FK_Operations_Morgues" FromRole="Operations" ToRole="Morgues" />
+          <NavigationProperty Name="Positions" Relationship="MorgueModel.FK_Operations_Positions" FromRole="Operations" ToRole="Positions" />
+        </EntityType>
+        <Association Name="FK_Operations_Morgues">
+          <End Type="MorgueModel.Morgues" Role="Morgues" Multiplicity="1" />
+          <End Type="MorgueModel.Operations" Role="Operations" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Morgues">
+              <PropertyRef Name="idMorgue" />
+            </Principal>
+            <Dependent Role="Operations">
+              <PropertyRef Name="idMorgue" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Operations_Positions">
+          <End Type="MorgueModel.Positions" Role="Positions" Multiplicity="1" />
+          <End Type="MorgueModel.Operations" Role="Operations" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Positions">
+              <PropertyRef Name="idMorgue" />
+              <PropertyRef Name="idPerson" />
+              <PropertyRef Name="nameOfPosition" />
+            </Principal>
+            <Dependent Role="Operations">
+              <PropertyRef Name="idMorgue" />
+              <PropertyRef Name="idOperator" />
+              <PropertyRef Name="nameOfOperatorsPosition" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="login" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="password" Type="String" Nullable="false" MaxLength="88" FixedLength="true" Unicode="false" />
+          <Property Name="salt" Type="String" Nullable="false" MaxLength="88" FixedLength="true" Unicode="false" />
+          <Property Name="role" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="dateOfReg" Type="DateTime" Nullable="false" Precision="0" />
+        </EntityType>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Хранилище MorgueModelContainer" CdmEntityContainer="MorgueEntities">
+          <EntitySetMapping Name="Stuff">
+            <EntityTypeMapping TypeName="MorgueModel.Stuff">
+              <MappingFragment StoreEntitySet="Stuff">
+                <ScalarProperty Name="pensioner" ColumnName="pensioner" />
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="firstName" ColumnName="firstName" />
+                <ScalarProperty Name="secondName" ColumnName="secondName" />
+                <ScalarProperty Name="age" ColumnName="age" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Buildings">
+            <EntityTypeMapping TypeName="MorgueModel.Buildings">
+              <MappingFragment StoreEntitySet="Buildings">
+                <ScalarProperty Name="floorCount" ColumnName="floorCount" />
+                <ScalarProperty Name="type" ColumnName="type" />
+                <ScalarProperty Name="address" ColumnName="address" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Morgues">
+            <EntityTypeMapping TypeName="MorgueModel.Morgues">
+              <MappingFragment StoreEntitySet="Morgues">
+                <ScalarProperty Name="typeOfFinancing" ColumnName="typeOfFinancing" />
+                <ScalarProperty Name="workersAmount" ColumnName="workersAmount" />
+                <ScalarProperty Name="officialName" ColumnName="officialName" />
+                <ScalarProperty Name="typeOfMorgue" ColumnName="typeOfMorgue" />
+                <ScalarProperty Name="address" ColumnName="address" />
+                <ScalarProperty Name="idMorgue" ColumnName="idMorgue" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Positions">
+            <EntityTypeMapping TypeName="MorgueModel.Positions">
+              <MappingFragment StoreEntitySet="Positions">
+                <ScalarProperty Name="permissionToOperate" ColumnName="permissionToOperate" />
+                <ScalarProperty Name="salary" ColumnName="salary" />
+                <ScalarProperty Name="nameOfPosition" ColumnName="nameOfPosition" />
+                <ScalarProperty Name="idPerson" ColumnName="idPerson" />
+                <ScalarProperty Name="idMorgue" ColumnName="idMorgue" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Operations">
+            <EntityTypeMapping TypeName="MorgueModel.Operations">
+              <MappingFragment StoreEntitySet="Operations">
+                <ScalarProperty Name="date" ColumnName="date" />
+                <ScalarProperty Name="nameOfOperatorsPosition" ColumnName="nameOfOperatorsPosition" />
+                <ScalarProperty Name="idOperator" ColumnName="idOperator" />
+                <ScalarProperty Name="idPatient" ColumnName="idPatient" />
+                <ScalarProperty Name="idMorgue" ColumnName="idMorgue" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="MorgueModel.Users">
+              <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="dateOfReg" ColumnName="dateOfReg" />
+                <ScalarProperty Name="role" ColumnName="role" />
+                <ScalarProperty Name="salt" ColumnName="salt" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="login" ColumnName="login" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Нет" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
